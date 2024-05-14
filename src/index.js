@@ -1,22 +1,12 @@
-function upDateTime() {
-  // Los Angeles
-  let losAngelesElement = document.querySelector("#los-angeles");
-  if (losAngelesElement) {
-  let losAngelesDateElement = losAngelesElement.querySelector(".date");
-  let losAngelesTimeElement = losAngelesElement.querySelector(".time");
-  let LosAngelesTime = moment().tz("America/Los_Angeles");
-  losAngelesDateElement.innerHTML = LosAngelesTime.format("MMMM Do YYYY");
-  losAngelesTimeElement.innerHTML = LosAngelesTime.format("h:mm:ss [<small>]A[</small>]");
-}
-  // Paris
-  let parisElement = document.querySelector("#paris");
-  if (parisElement) {
-  let parisDateElement = parisElement.querySelector(".date");
-  let parisTimeElement = parisElement.querySelector(".time");
-  let parisTime = moment().tz("Europe/Paris");
-  parisDateElement.innerHTML = parisTime.format("MMMM Do YYYY");
-  parisTimeElement.innerHTML = parisTime.format("h:mm:ss [<small>]A[</small>]");
-}
+function updateCityTime(cityId, timeZone) {
+  let cityElement = document.querySelector(`#${cityId}`);
+  if (cityElement) {
+    let dateElement = cityElement.querySelector(".date");
+    let timeElement = cityElement.querySelector(".time");
+    let cityTime = moment().tz(timeZone);
+    dateElement.innerHTML = cityTime.format("MMMM Do YYYY");
+    timeElement.innerHTML = cityTime.format("h:mm:ss [<small>]A[</small>]");
+  }
 }
 function updateCity(event) {
   let cityTimeZone = event.target.value;
@@ -38,8 +28,16 @@ function updateCity(event) {
       `;
 }
 
-upDateTime();
-setInterval(upDateTime, 1000);
+function updateAllCities() {
+  updateCityTime("sydney", "Australia/Sydney");
+  updateCityTime("paris", "Europe/Paris");
+  updateCityTime("tokyo", "Asia/Tokyo");
+}
+
+updateAllCities();
+setInterval(updateAllCities, 1000);
 
 let citiesSelectElement = document.querySelector("#city");
 citiesSelectElement.addEventListener("change", updateCity);
+
+setInterval(updateCity, 1000);
